@@ -19,7 +19,7 @@ This will run the grid as a daemon. Remove `-d` to run it in a terminal.
 
 By default, the grid will run one copy of each browser but you can scale it easily after it is started. For example: 
 ```sh
-docker-compose firefox=5 chrome=3 phantomjs=2
+docker-compose scale firefox=5 chrome=3 phantomjs=2
 ```
 
 ## Stopping the grid
