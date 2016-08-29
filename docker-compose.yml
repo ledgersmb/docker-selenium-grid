@@ -1,0 +1,58 @@
+version: '2'
+
+services:
+
+  hub:
+    image: selenium/hub
+    mem_limit: 500m
+    memswap_limit: 1g
+    ports:
+      - 4422:4444
+    dns:
+      - 8.8.8.8
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - GRID_TIMEOUT=300000
+      - GRID_BROWSER_TIMEOUT=600000
+      - HUB_PORT_4444_TCP_ADDR=hub
+
+  chrome:
+    image: selenium/node-chrome
+    mem_limit: 500m
+    memswap_limit: 1g
+    volumes:
+      - /dev/shm:/dev/shm
+    dns:
+      - 8.8.8.8
+    depends_on:
+      - hub
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+
+  firefox:
+    image: selenium/node-firefox
+    mem_limit: 500m
+    memswap_limit: 1g
+    volumes:
+      - /dev/shm:/dev/shm
+    dns:
+      - 8.8.8.8
+    depends_on:
+      - hub
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=hub
+
+  phantomjs:
+    image: akeem/selenium-node-phantomjs
+    mem_limit: 500m
+    memswap_limit: 1g
+    volumes:
+      - /dev/shm:/dev/shm
+    dns:
+      - 8.8.8.8
+    depends_on:
+      - hub
+    environment:
+      - PHANTOMJS_OPTS="--ignore-ssl-errors=true"
+      - HUB_PORT_4444_TCP_ADDR=hub
