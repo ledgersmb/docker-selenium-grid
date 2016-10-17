@@ -4,8 +4,8 @@ services:
 
   hub:
     image: selenium/hub
-    mem_limit: 500m
-    memswap_limit: 1g
+    mem_limit: 200m
+    memswap_limit: 400m
     ports:
       - 4422:4444
     dns:
@@ -14,13 +14,15 @@ services:
       - /dev/shm:/dev/shm
     environment:
       - GRID_TIMEOUT=300000
-      - GRID_BROWSER_TIMEOUT=600000
+      - GRID_BROWSER_TIMEOUT=250000
+      - GRID_BROWSER_TIMEOUT=0
       - HUB_PORT_4444_TCP_ADDR=hub
+      - SE_OPTS="nodeTimeout:240"
 
   chrome:
     image: selenium/node-chrome
-    mem_limit: 500m
-    memswap_limit: 1g
+    mem_limit: 400m
+    memswap_limit: 800m
     volumes:
       - /dev/shm:/dev/shm
     dns:
@@ -29,6 +31,7 @@ services:
       - hub
     environment:
       - HUB_PORT_4444_TCP_ADDR=hub
+      - DBUS_SESSION_BUS_ADDRESS=/dev/null
 
   firefox:
     image: selenium/node-firefox
@@ -42,11 +45,12 @@ services:
       - hub
     environment:
       - HUB_PORT_4444_TCP_ADDR=hub
+      - DBUS_SESSION_BUS_ADDRESS=/dev/null
 
   phantomjs:
     image: akeem/selenium-node-phantomjs
-    mem_limit: 500m
-    memswap_limit: 1g
+    mem_limit: 100m
+    memswap_limit: 200m
     volumes:
       - /dev/shm:/dev/shm
     dns:
@@ -56,3 +60,4 @@ services:
     environment:
       - PHANTOMJS_OPTS="--ignore-ssl-errors=true"
       - HUB_PORT_4444_TCP_ADDR=hub
+      - DBUS_SESSION_BUS_ADDRESS=/dev/null
